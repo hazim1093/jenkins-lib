@@ -124,7 +124,7 @@ def call(body) {
                             }
                         }
                         
-                        gitlabCommitStatus(name: "System test") {
+                        /*gitlabCommitStatus(name: "System test") {
                             systemtestStage([microservice: [name: project, version: buildVersion]], isMergeRequestBuild)
                         }
 
@@ -137,6 +137,7 @@ def call(body) {
                                 build job: "${project}-prod-deploy", parameters: [[$class: 'StringParameterValue', name: 'VERSION', value: buildVersion]]
                             }
                         }
+                        */
                     }
                 }
             }
