@@ -108,7 +108,7 @@ def call(body) {
                         gitlabCommitStatus(name: "Quality Analysis") {
                             stage("build & SonarQube analysis") {
                                 node {
-                                    withSonarQubeEnv('My SonarQube Server') {
+                                    withSonarQubeEnv('sonarqube') {
                                        sh "${scannerHome}/bin/sonar-scanner"
                                     }
                                 }
