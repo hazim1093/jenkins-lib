@@ -107,9 +107,11 @@ def call(body) {
                         
                         gitlabCommitStatus(name: "Quality Analysis") {
                             stage("build & SonarQube analysis") {
-                                node {
-                                    withSonarQubeEnv('sonarqube') {
-                                       sh "${scannerHome}/bin/sonar-scanner"
+                                dockerNode(docker: 'newtmitch/sonar-scanner:3.2.0') {
+                                    container(name: docker) {
+                                        withSonarQubeEnv('sonarqube') {
+                                           sh "sonar-scanner"
+                                        }
                                     }
                                 }
                             }
