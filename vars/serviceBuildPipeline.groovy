@@ -107,7 +107,7 @@ def call(body) {
                         
                         gitlabCommitStatus(name: "Quality Analysis") {
                             stage("build & SonarQube analysis") {
-                                sonarNode(sonarScannerImage: 'newtmitch/sonar-scanner:3.2.0')
+                                sonarNode(sonarScannerImage: 'newtmitch/sonar-scanner:3.2.0') {
                                       sh "sonar-scanner"
                                 }
                             }
