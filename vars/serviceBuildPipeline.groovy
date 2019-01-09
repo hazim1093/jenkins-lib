@@ -97,9 +97,9 @@ def call(body) {
                                         sh "mvn deploy"
                                     }
 
-                                    stage('push docker image') {
+                                   /* stage('push docker image') {
                                         sh "mvn fabric8:push -Ddocker.push.registry=${dockerRepo}"
-                                    }
+                                    }*/
 
                                 }
                             }
