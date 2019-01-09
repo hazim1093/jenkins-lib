@@ -107,11 +107,8 @@ def call(body) {
                         
                         gitlabCommitStatus(name: "Quality Analysis") {
                             stage("build & SonarQube analysis") {
-                                node {
-                                    def scannerHome = tool 'SonarQube Scanner 2.8';
-                                    withSonarQubeEnv('sonarqube') {
-                                      sh "${scannerHome}/bin/sonar-scanner"
-                                    }
+                                sonarNode(sonarScannerImage: 'newtmitch/sonar-scanner:3.2.0')
+                                      sh "sonar-scanner"
                                 }
                             }
 
