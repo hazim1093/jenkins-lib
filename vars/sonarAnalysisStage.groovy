@@ -6,20 +6,14 @@ def call(projectName, projectVersion, sonarSources = ".",
 
     stage("Sonar Analysis") {
         sonarNode(sonarScannerImage: 'newtmitch/sonar-scanner:3.2.0') {
-                bash "sonar-scanner "
+            bash "sonar-scanner "
         }
-    }
 
-    stage("Quality Gate"){
         timeout(time: 1, unit: 'HOURS') {
             def qg = waitForQualityGate()
             if (qg.status != 'OK') {
                 error "Pipeline aborted due to quality gate failure: ${qg.status}"
             }
-        }
-
-        if (testJob.getResult() != "SUCCESS") {
-            error "System test failed"
         }
     }
 }
