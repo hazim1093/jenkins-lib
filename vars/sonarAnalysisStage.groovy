@@ -6,9 +6,9 @@ def call(projectName, projectVersion, sonarSources = ".",
 
     stage("Sonar Analysis") {
         sonarNode(sonarScannerImage: 'newtmitch/sonar-scanner:3.2.0') {
-            sh '''
-                #!/bin/bash
-                sonar-scanner \
+            sh """
+                chmod +x /root/sonar-scanner/bin/sonar-scanner
+                /root/sonar-scanner/bin/sonar-scanner \
                     -Dsonar.host.url=${SONARQUBE_HOST_URL} \
                     -Dsonar.login=${SONARQUBE_TOKEN} \
                     -Dsonar.projectKey=${projectName} \
@@ -17,7 +17,7 @@ def call(projectName, projectVersion, sonarSources = ".",
                     -Dsonar.java.binaries=${javaBinaries} \
                     -Dsonar.junit.reportPaths=${junitReportPaths} \
                     -Dsonar.jacoco.reportPaths=${jacocoReportPaths}
-                '''
+                """
         }
 
         timeout(time: 1, unit: 'HOURS') {
