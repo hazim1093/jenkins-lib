@@ -6,14 +6,14 @@ def call(projectName, projectVersion, sonarSources = ".",
 
     stage("Sonar Analysis") {
         sonarNode(sonarScannerImage: 'newtmitch/sonar-scanner:3.2.0') {
-            bash "sonar-scanner
-                    -Dsonar.host.url=${SONARQUBE_HOST_URL}
-                    -Dsonar.login=${SONARQUBE_TOKEN}
-                    -Dsonar.projectKey=${projectName}
-                    -Dsonar.projectVersion=${projectVersuib}
-                    -Dsonar.sources=${sonarSources}
-                    -Dsonar.java.binaries=${javaBinaries}
-                    -Dsonar.junit.reportPaths=${junitReportPaths}
+            bash "sonar-scanner \
+                    -Dsonar.host.url=${SONARQUBE_HOST_URL} \
+                    -Dsonar.login=${SONARQUBE_TOKEN} \
+                    -Dsonar.projectKey=${projectName} \
+                    -Dsonar.projectVersion=${projectVersuib} \
+                    -Dsonar.sources=${sonarSources} \
+                    -Dsonar.java.binaries=${javaBinaries} \
+                    -Dsonar.junit.reportPaths=${junitReportPaths} \
                     -Dsonar.jacoco.reportPaths=${jacocoReportPaths}"
         }
 
