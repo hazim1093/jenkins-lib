@@ -106,7 +106,7 @@ def call(body) {
                         }
                         
                         gitlabCommitStatus(name: "Quality Analysis") {
-                            sonarAnalysisStage(projectName: project, projectVersion: buildVersion)
+                            sonarAnalysisStage(project, buildVersion)
                         }
                         
                         /*gitlabCommitStatus(name: "System test") {
