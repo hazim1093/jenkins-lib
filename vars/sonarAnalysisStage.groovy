@@ -5,10 +5,9 @@ def call(projectName, projectVersion, sonarSources = ".",
         jacocoReportPaths = "target/jacoco.exec") {
 
     stage("Sonar Analysis") {
-        sonarNode(sonarScannerImage: 'newtmitch/sonar-scanner:3.2.0') {
+        sonarNode(sonarScannerImage: 'stakater/pipeline-tools:SNAPSHOT-PR-6-9') {
             sh """
-                chmod +x /root/sonar-scanner/bin/sonar-scanner
-                /root/sonar-scanner/bin/sonar-scanner \
+                sonar-scanner \
                     -Dsonar.host.url=${SONARQUBE_HOST_URL} \
                     -Dsonar.login=${SONARQUBE_TOKEN} \
                     -Dsonar.projectKey=${projectName} \
