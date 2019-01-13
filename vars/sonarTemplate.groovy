@@ -7,6 +7,7 @@ def call(Map parameters = [:], body) {
     def defaultLabel = buildId('sonar')
     def label = parameters.get('label', defaultLabel)
 
+ //TODO: Update image
     def sonarScannerImage = parameters.get('sonarScannerImage', 'stakater/pipeline-tools:v1.16.4')
     def inheritFrom = parameters.get('inheritFrom', 'base')
 
@@ -34,6 +35,9 @@ def call(Map parameters = [:], body) {
                     )],
             volumes: [
                     hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')]) {
+        
+        TODO: //if(Files.exists(bin/sonarcubcli ?))
+        // write sonr.login file
         body()
     }
 }
