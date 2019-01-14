@@ -70,7 +70,7 @@ def call(body) {
 
                         gitlabCommitStatus(name: "Build") {
                             mavenNode(
-                                    mavenImage: 'stakater/builder-maven:3.5.4-v1.16.8-SNAPSHOT-PR-4-5',
+                                    mavenImage: 'stakater/builder-maven:3.5.4-v1.16.8-SNAPSHOT-PR-4-6',
                                     javaOptions: '-Duser.home=/home/jenkins -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -Dsun.zip.disableMemoryMapping=true -XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90',
                                     mavenOpts: '-Duser.home=/home/jenkins -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn') {
 
