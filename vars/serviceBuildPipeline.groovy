@@ -117,7 +117,7 @@ def call(body) {
                                                 -Dsonar.junit.reportPaths="target/surefire-reports" \
                                                 -Dsonar.jacoco.reportPaths="target/jacoco.exec" \
                                                 -Dsonar.buildbreaker.queryInterval=${sonarScanQueryInterval} \
-                                                -Dsonar.buildbreaker.queryMaxAttempts=${queryMaxAttempts}
+                                                -Dsonar.buildbreaker.queryMaxAttempts=${sonarScanQueryMaxAttempts}
                                         """
                                     }
 
