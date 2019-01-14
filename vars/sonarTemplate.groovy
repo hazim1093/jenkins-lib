@@ -36,7 +36,7 @@ def call(Map parameters = [:], body) {
             volumes: [
                     hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')]) {
         sh """
-                scannerPath=$(readlink $(which sonar-scanner))
+                scannerPath=\$(readlink \$(which sonar-scanner))
                 scannerDir=\${scannerPath%bin/sonar-scanner}
                 echo "sonar.login=\${SONARQUBE_TOKEN}" >> \${scannerDir}/conf/sonar-scanner.properties
         """
