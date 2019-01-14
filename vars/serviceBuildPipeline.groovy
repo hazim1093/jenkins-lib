@@ -108,7 +108,7 @@ def call(body) {
                                     stage('SonarQube Analysis') {
                                         sh """
                                             /bin/sonar-scanner \
-                                                -Dsonar.host.url=${SONARQUBE_HOST_URL} \
+                                                -Dsonar.host.url=${SONARQUBE_HOST} \
                                                 -Dsonar.login=\${SONARQUBE_TOKEN} \
                                                 -Dsonar.projectKey=${project} \
                                                 -Dsonar.projectVersion=${buildVersion} \
