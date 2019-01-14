@@ -13,8 +13,7 @@ def call(body) {
     def kubeConfig = params.KUBE_CONFIG
     def dockerRepo = params.DOCKER_URL
     def nexusHost = params.MAVEN_REPO
-    // TODO: Remove default ?
-    def sonarQubeHost = params.SONARQUBE_HOST ?: "https://sonarqube.tools.tools178.k8syard.com/"
+    def sonarQubeHost = params.SONARQUBE_HOST
     def isMergeRequestBuild = params.IS_MERGE_REQUEST_BUILD ?: false
     echo "isMergeRequestBuild: ${isMergeRequestBuild}"
     echo "checkoutBranch: ${env.gitlabBranch}"
@@ -70,7 +69,7 @@ def call(body) {
 
                         gitlabCommitStatus(name: "Build") {
                             mavenNode(
-                                    mavenImage: 'stakater/builder-maven:3.5.4-v1.16.8-SNAPSHOT-PR-4-6',
+                                    mavenImage: 'stakater/builder-maven:3.5.4-jdk1.8-v1.16.8-v0.0.4',
                                     javaOptions: '-Duser.home=/home/jenkins -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -Dsun.zip.disableMemoryMapping=true -XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90',
                                     mavenOpts: '-Duser.home=/home/jenkins -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn') {
 
