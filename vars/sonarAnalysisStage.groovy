@@ -5,7 +5,7 @@ def call(projectName, projectVersion, queryInterval = 5000, queryMaxAttempts = 1
         jacocoReportPaths = "target/jacoco.exec") {
 
     stage("Sonar Analysis") {
-        sonarNode(sonarScannerImage: 'stakater/pipeline-tools:SNAPSHOT-PR-6-9') {
+        sonarNode(sonarScannerImage: 'stakater/pipeline-tools:SNAPSHOT-PR-6-14') {
             sh """
                 /bin/sonar-scanner \
                     -Dsonar.host.url=${SONARQUBE_HOST_URL} \
