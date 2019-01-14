@@ -35,9 +35,11 @@ def call(Map parameters = [:], body) {
                     )],
             volumes: [
                     hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')]) {
-        
-        TODO: //if(Files.exists(bin/sonarcubcli ?))
-        // write sonr.login file
+        sh """
+                scannerPath=$(readlink $(which sonar-scanner))
+                scannerDir=\${scannerPath%bin/sonar-scanner}
+                echo "sonar.login=\${SONARQUBE_TOKEN}" >> \${scannerDir}/conf/sonar-scanner.properties
+        """
         body()
     }
 }
