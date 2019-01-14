@@ -112,7 +112,8 @@ def call(body) {
                                                 -Dsonar.login=\${SONARQUBE_TOKEN} \
                                                 -Dsonar.projectKey=${project} \
                                                 -Dsonar.projectVersion=${buildVersion} \
-                                                -Dsonar.sources="." \
+                                                -Dsonar.sources="src/main/java" \
+                                                -Dsonar.tests="src/test/java" \
                                                 -Dsonar.java.binaries="target/classes" \
                                                 -Dsonar.junit.reportPaths="target/surefire-reports" \
                                                 -Dsonar.jacoco.reportPaths="target/jacoco.exec" \
