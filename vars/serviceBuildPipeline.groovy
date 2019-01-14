@@ -7,9 +7,14 @@ def call(body) {
     body.delegate = config
     body()
 
+    def sonarScanQueryInterval = config.sonarScanQueryInterval ?: 5000
+    def sonarScanQueryMaxAttempts = config.sonarScanQueryMaxAttempts ?: 120
+
     def kubeConfig = params.KUBE_CONFIG
     def dockerRepo = params.DOCKER_URL
     def nexusHost = params.MAVEN_REPO
+    // TODO: Remove default ?
+    def sonarQubeHost = params.SONARQUBE_HOST ?: "https://sonarqube.tools.tools178.k8syard.com/"
     def isMergeRequestBuild = params.IS_MERGE_REQUEST_BUILD ?: false
     echo "isMergeRequestBuild: ${isMergeRequestBuild}"
     echo "checkoutBranch: ${env.gitlabBranch}"
@@ -34,7 +39,10 @@ def call(body) {
                     podTemplate(
                             name: 'sa-secret',
                             serviceAccount: 'digitaldealer-serviceaccount',
-                            envVars: [envVar(key: 'KUBERNETES_MASTER', value: 'https://kubernetes.default:443')],
+                            envVars: [
+                                envVar(key: 'KUBERNETES_MASTER', value: 'https://kubernetes.default:443'),
+                                secretEnvVar(key: 'SONARQUBE_TOKEN', secretName: 'jenkins-sonarqube', secretKey: 'token')
+                            ],
                             volumes: [
                                     secretVolume(secretName: 'jenkins-maven-settings', mountPath: '/home/jenkins/.m2'),
                                     persistentVolumeClaim(claimName: 'jenkins-m2-cache', mountPath: '/home/jenkins/.mvnrepository'),
@@ -62,7 +70,7 @@ def call(body) {
 
                         gitlabCommitStatus(name: "Build") {
                             mavenNode(
-                                    mavenImage: 'stakater/maven-jenkins:3.5.4-0.6',
+                                    mavenImage: 'stakater/builder-maven:3.5.4-v1.16.8-SNAPSHOT-PR-4-5',
                                     javaOptions: '-Duser.home=/home/jenkins -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -Dsun.zip.disableMemoryMapping=true -XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90',
                                     mavenOpts: '-Duser.home=/home/jenkins -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn') {
 
@@ -97,16 +105,28 @@ def call(body) {
                                         sh "mvn deploy"
                                     }
 
+                                    stage('SonarQube Analysis') {
+                                        sh """
+                                            /bin/sonar-scanner \
+                                                -Dsonar.host.url=${SONARQUBE_HOST_URL} \
+                                                -Dsonar.login=\${SONARQUBE_TOKEN} \
+                                                -Dsonar.projectKey=${project} \
+                                                -Dsonar.projectVersion=${buildVersion} \
+                                                -Dsonar.sources="." \
+                                                -Dsonar.java.binaries="target/classes" \
+                                                -Dsonar.junit.reportPaths="target/surefire-reports" \
+                                                -Dsonar.jacoco.reportPaths="target/jacoco.exec" \
+                                                -Dsonar.buildbreaker.queryInterval=${sonarScanQueryInterval} \
+                                                -Dsonar.buildbreaker.queryMaxAttempts=${queryMaxAttempts}
+                                        """
+                                    }
+
                                    /* stage('push docker image') {
                                         sh "mvn fabric8:push -Ddocker.push.registry=${dockerRepo}"
                                     }*/
 
                                 }
                             }
-                        }
-                        
-                        gitlabCommitStatus(name: "Quality Analysis") {
-                            sonarAnalysisStage(project, buildVersion)
                         }
                         
                         /*gitlabCommitStatus(name: "System test") {
