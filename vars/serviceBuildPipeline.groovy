@@ -118,7 +118,17 @@ def call(body) {
                                                 -Dsonar.jacoco.reportPaths="target/jacoco.exec" \
                                                 -Dsonar.buildbreaker.alternativeServerUrl=${sonarQubeHost} \
                                                 -Dsonar.buildbreaker.queryInterval=${sonarScanQueryInterval} \
-                                                -Dsonar.buildbreaker.queryMaxAttempts=${sonarScanQueryMaxAttempts}
+                                                -Dsonar.buildbreaker.queryMaxAttempts=${sonarScanQueryMaxAttempts} \
+                                                | tee scanner.out
+
+                                            if grep -q "ERROR: SonarQube server \[[a-zA-Z0-9:\/.\-\?]*\]  can not be reached" scanner.out
+                                            then
+                                                echo "WARNING: Cannot connect to SonarQube, Skipping Quality Analysis";
+                                                exit 0;
+                                            else
+                                                echo "ERROR: Quality Analysis Failed"
+                                                exit 1;
+                                            fi
                                         """
                                     }
 
