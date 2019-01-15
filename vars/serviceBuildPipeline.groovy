@@ -121,7 +121,7 @@ def call(body) {
                                                 -Dsonar.buildbreaker.queryMaxAttempts=${sonarScanQueryMaxAttempts} \
                                                 | tee scanner.out
 
-                                            if grep -q "ERROR: SonarQube server \\[[a-zA-Z0-9:\\/.\\-\\?]*\\]  can not be reached" scanner.out
+                                            if grep -q "ERROR: SonarQube server \\[[a-zA-Z0-9:\\/.\\-\\?]*\\] can not be reached" scanner.out
                                             then
                                                 echo "WARNING: Cannot connect to SonarQube, Skipping Quality Analysis";
                                                 exit 0;
