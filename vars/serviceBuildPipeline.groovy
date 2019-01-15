@@ -116,6 +116,7 @@ def call(body) {
                                                 -Dsonar.java.binaries="target/classes" \
                                                 -Dsonar.junit.reportPaths="target/surefire-reports" \
                                                 -Dsonar.jacoco.reportPaths="target/jacoco.exec" \
+                                                -Dsonar.buildbreaker.alternativeServerUrl=${sonarQubeHost} \
                                                 -Dsonar.buildbreaker.queryInterval=${sonarScanQueryInterval} \
                                                 -Dsonar.buildbreaker.queryMaxAttempts=${sonarScanQueryMaxAttempts}
                                         """
