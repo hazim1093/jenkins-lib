@@ -19,7 +19,7 @@ def call(body) {
     echo "checkoutBranch: ${env.gitlabBranch}"
 
     assert !(isMergeRequestBuild && env.gitlabSourceBranch == null)
-    def branchName = isMergeRequestBuild ? env.gitlabSourceBranch : env.gitlabBranch ?: 'master'
+    def branchName = isMergeRequestBuild ? env.gitlabSourceBranch : env.gitlabBranch ?: 'test-jenkins'
 
     def onlyMock = config.onlyMock ?: false
 
