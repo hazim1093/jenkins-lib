@@ -103,16 +103,7 @@ def call(body) {
 
                                         sh "mvn deploy"
                                         //TODO: Migrating Tools Cluster
-                                        try {
-                                            sh """
-                                                echo "Deploy to Alternate Nexus"
-                                                mvn deploy -Pnexus-v2 -Dmaven.test.skip=true -Dmaven.install.skip=true
-                                            """
-                                        }
-                                        catch(Exception ex) {
-                                            println "WARNING: Deployment to alternate Nexus failed"
-                                            println "Pipeline Will continue"
-                                        }
+                                        deployToAltRepo()
                                     }
 
                                     stage('SonarQube Analysis') {
@@ -175,6 +166,20 @@ String getBJVersion(config) {
             returnStdout: true
     ) as Integer
     return "${versionPrefix}.${version_last + 1}"
+}
+
+// TODO: Migrating Tools Cluster
+void deployToAltRepo() {
+    try {
+        sh """
+            echo "Deploy to Alternate Nexus"
+            mvn deploy -Pnexus-v2 -Dmaven.test.skip=true -Dmaven.install.skip=true
+        """
+    }
+    catch(Exception ex) {
+        println "WARNING: Deployment to alternate Nexus failed"
+        println "Pipeline Will continue"
+    }
 }
 
 // TODO: Migrating Tools Cluster
