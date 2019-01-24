@@ -210,6 +210,7 @@ void pushImageToAltRepo(altRepository) {
     }
     catch(Exception ex) {
         println "WARNING: Pushing docker image to alternate repository failed"
+        ex.printStackTrace()
         println "Pipeline will continue."
     }
 }
