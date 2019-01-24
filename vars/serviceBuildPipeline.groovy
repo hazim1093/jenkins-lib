@@ -153,6 +153,8 @@ def call(body) {
             finally {
                 if (isMergeRequestBuild) {
                     deleteArtifactFromNexus(project, buildVersion, nexusHost)
+                    // TODO: Migrating Tools Cluster
+                    deleteArtifactFromAlternateNexus(project, buildVersion, "nexus.lab.k8syard.com")
                 }
             }
         }
@@ -166,6 +168,11 @@ String getBJVersion(config) {
             returnStdout: true
     ) as Integer
     return "${versionPrefix}.${version_last + 1}"
+}
+
+static String getMRVersion(branchName, currentBuild) {
+    def buildNumber = currentBuild.number
+    return "${branchName}-${buildNumber}"
 }
 
 // TODO: Migrating Tools Cluster
@@ -202,8 +209,12 @@ void pushImageToAltRepo(altRepository) {
     }
 }
 
-static String getMRVersion(branchName, currentBuild) {
-    def buildNumber = currentBuild.number
-    return "${branchName}-${buildNumber}"
+// TODO: Migrating Tools Cluster
+void deleteArtifactFromAlternateNexus(String artifact, String version, String nexusHost) {
+    try {
+        deleteArtifactFromNexus(project, buildVersion, nexusHost)
+    }
+    catch(Exception ex) {
+        println "WARNING: Failed to delete artifact from alternate Nexus"
+    }
 }
-
