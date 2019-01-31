@@ -83,8 +83,8 @@ def call(body) {
                                     stage("checkout") {
                                         scmVars = checkout([$class: 'GitSCM', branches: [[name: branchName]], userRemoteConfigs: scm.getUserRemoteConfigs()])
                                         def pom = readMavenPom file: 'pom.xml'
-                                        // Explicitly set project name fro property
-                                        // NOTE: Should only be used for multi-module projects
+                                        // Explicitly set project name from property
+                                        // NOTE: 'projectName' Should only be set for multi-module projects
                                         project = config.projectName ?: pom.artifactId
                                         buildVersion = getVersion()
                                         currentBuild.displayName = "${buildVersion}"
